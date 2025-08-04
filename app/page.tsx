@@ -256,9 +256,9 @@ export default function BiorhythmApp() {
                   </span>
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-2 sm:p-6">
                 <BiorhythmChart data={biorhythmData.chartData} />
-                
+
                 {/* Selected Date Information */}
                 {selectedDate.toDateString() !== new Date().toDateString() && biorhythmData.selectedDate && (
                   <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-slate-700/50 rounded-lg border border-purple-500/20">
@@ -279,9 +279,9 @@ export default function BiorhythmApp() {
                           {biorhythmData.selectedDate.physical}%
                         </div>
                         <div className="text-xs sm:text-sm text-slate-300">Físico</div>
-                        <Progress 
-                          value={Math.abs(biorhythmData.selectedDate.physical)} 
-                          className="h-2 mt-2 [&>div]:bg-orange-400" 
+                        <Progress
+                          value={Math.abs(biorhythmData.selectedDate.physical)}
+                          className="h-2 mt-2 [&>div]:bg-orange-400"
                         />
                       </div>
                       <div className="text-center p-2 sm:p-0">
@@ -289,9 +289,9 @@ export default function BiorhythmApp() {
                           {biorhythmData.selectedDate.emotional}%
                         </div>
                         <div className="text-xs sm:text-sm text-slate-300">Emocional</div>
-                        <Progress 
-                          value={Math.abs(biorhythmData.selectedDate.emotional)} 
-                          className="h-2 mt-2 [&>div]:bg-blue-400" 
+                        <Progress
+                          value={Math.abs(biorhythmData.selectedDate.emotional)}
+                          className="h-2 mt-2 [&>div]:bg-blue-400"
                         />
                       </div>
                       <div className="text-center p-2 sm:p-0">
@@ -299,9 +299,9 @@ export default function BiorhythmApp() {
                           {biorhythmData.selectedDate.intellectual}%
                         </div>
                         <div className="text-xs sm:text-sm text-slate-300">Intelectual</div>
-                        <Progress 
-                          value={Math.abs(biorhythmData.selectedDate.intellectual)} 
-                          className="h-2 mt-2 [&>div]:bg-green-400" 
+                        <Progress
+                          value={Math.abs(biorhythmData.selectedDate.intellectual)}
+                          className="h-2 mt-2 [&>div]:bg-green-400"
                         />
                       </div>
                     </div>

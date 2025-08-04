@@ -45,12 +45,33 @@ const CustomDot = (props: any) => {
 
 export default function BiorhythmChart({ data }: BiorhythmChartProps) {
   return (
-    <div className="h-80 w-full">
+    <div className="h-64 sm:h-80 lg:h-96 w-full -mx-2 sm:mx-0">
       <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+        <LineChart 
+          data={data} 
+          margin={{ 
+            top: 10, 
+            right: 10, 
+            left: 10, 
+            bottom: 20 
+          }}
+        >
           <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-          <XAxis dataKey="date" stroke="#9ca3af" fontSize={12} />
-          <YAxis domain={[-100, 100]} stroke="#9ca3af" fontSize={12} />
+          <XAxis 
+            dataKey="date" 
+            stroke="#9ca3af" 
+            fontSize={10}
+            angle={-45}
+            textAnchor="end"
+            height={60}
+            interval={0}
+          />
+          <YAxis 
+            domain={[-100, 100]} 
+            stroke="#9ca3af" 
+            fontSize={10}
+            width={35}
+          />
           <Tooltip content={<CustomTooltip />} />
           <ReferenceLine y={0} stroke="#6b7280" strokeDasharray="2 2" />
           <ReferenceLine y={50} stroke="#4b5563" strokeDasharray="1 1" />
@@ -60,7 +81,7 @@ export default function BiorhythmChart({ data }: BiorhythmChartProps) {
             type="monotone"
             dataKey="physical"
             stroke="#fb7185"
-            strokeWidth={3}
+            strokeWidth={2}
             name="Físico"            
             dot={CustomDot}
             activeDot={{ r: 4, fill: "#fb7185" }}
@@ -69,7 +90,7 @@ export default function BiorhythmChart({ data }: BiorhythmChartProps) {
             type="monotone"
             dataKey="emotional"
             stroke="#60a5fa"
-            strokeWidth={3}            
+            strokeWidth={2}            
             name="Emocional"
             dot={CustomDot}
             activeDot={{ r: 4, fill: "#60a5fa" }}
@@ -78,7 +99,7 @@ export default function BiorhythmChart({ data }: BiorhythmChartProps) {
             type="monotone"
             dataKey="intellectual"
             stroke="#4ade80"
-            strokeWidth={3}            
+            strokeWidth={2}            
             name="Intelectual"
             dot={CustomDot}
             activeDot={{ r: 4, fill: "#4ade80" }}
