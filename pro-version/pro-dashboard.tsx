@@ -6,11 +6,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Crown, Users, TrendingUp, Calendar, Sparkles } from "lucide-react"
+import { Crown, Users, TrendingUp, Calendar, Sparkles, Activity } from "lucide-react"
 import DateSelector from "@/components/ui/date-selector"
 import PeopleManager from "./components/people-manager"
 import ComparisonSelector from "./components/comparison-selector"
 import MultiBiorhythmChart from "./components/multi-biorhythm-chart"
+import PersonDetailsCard from "./components/person-details-card"
 import {
   calculateMultiBiorhythms,
   generateCombinedRecommendations,
@@ -158,10 +159,14 @@ export default function ProDashboard({ onBackToBasic, initialUser }: ProDashboar
 
         {/* Main Dashboard */}
         <Tabs defaultValue="comparison" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 bg-slate-800/50">
+          <TabsList className="grid w-full grid-cols-4 bg-slate-800/50">
             <TabsTrigger value="people" className="flex items-center gap-2">
               <Users className="h-4 w-4" />
               <span className="hidden sm:inline">Personas</span>
+            </TabsTrigger>
+            <TabsTrigger value="details" className="flex items-center gap-2">
+              <Activity className="h-4 w-4" />
+              <span className="hidden sm:inline">Detalles</span>
             </TabsTrigger>
             <TabsTrigger value="comparison" className="flex items-center gap-2">
               <TrendingUp className="h-4 w-4" />
@@ -182,6 +187,66 @@ export default function ProDashboard({ onBackToBasic, initialUser }: ProDashboar
               onActivePeopleChange={setActivePeople}
               maxPeople={3}
             />
+          </TabsContent>
+
+          {/* Details Tab - Show all cycles for each active person */}
+          <TabsContent value="details" className="space-y-6">
+            {activePeople.length === 0 ? (
+              <Card className="bg-slate-800/50 border-slate-700">
+                <CardContent className="text-center py-12">
+                  <Activity className="mx-auto h-16 w-16 text-slate-400 mb-4" />
+                  <h3 className="text-xl font-semibold text-white mb-2">
+                    No hay personas activas
+                  </h3>
+                  <p className="text-slate-400 mb-4">
+                    Selecciona personas en la pestaña "Personas" para ver sus detalles completos
+                  </p>
+                </CardContent>
+              </Card>
+            ) : (
+              <>
+                {/* Date Selector for Details */}
+                <Card className="bg-slate-800/50 border-slate-700">
+                  <CardHeader>
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                      <CardTitle className="flex items-center text-lg sm:text-xl">
+                        <Activity className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+                        Detalles Individuales
+                      </CardTitle>
+                      <div className="w-full sm:w-auto">
+                        <DateSelector selectedDate={selectedDate} onDateChange={handleDateChange} />
+                      </div>
+                    </div>
+                    <CardDescription className="mt-2 text-xs sm:text-sm">
+                      Información completa de todos los ciclos para cada persona activa
+                      {selectedDate.toDateString() !== new Date().toDateString() && (
+                        <span className="block mt-1 text-purple-400">
+                          Mostrando datos para: {selectedDate.toLocaleDateString("es-ES", {
+                            weekday: "long",
+                            day: "numeric", 
+                            month: "long",
+                            year: "numeric"
+                          })}
+                        </span>
+                      )}
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
+
+                {/* Individual Person Details */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                  {biorhythmData?.people
+                    .filter(personData => activePeople.includes(personData.profile.id))
+                    .map((personData) => (
+                      <PersonDetailsCard
+                        key={personData.profile.id}
+                        personData={personData}
+                        selectedDate={selectedDate}
+                      />
+                    ))}
+                </div>
+              </>
+            )}
           </TabsContent>
 
           {/* Comparison Tab */}
