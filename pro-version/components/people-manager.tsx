@@ -202,7 +202,7 @@ export default function PeopleManager({ people, onPeopleChange, activePeople, on
                       type="date"
                       value={formData.birthDate}
                       onChange={(e) => setFormData({ ...formData, birthDate: e.target.value })}
-                      className="bg-slate-600 border-slate-500 text-white [&::-webkit-calendar-picker-indicator]:invert"
+                      className="bg-white border-slate-400 text-black [&::-webkit-calendar-picker-indicator]:filter-none"
                       required
                     />
                   </div>
