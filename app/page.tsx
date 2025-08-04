@@ -236,19 +236,24 @@ export default function BiorhythmApp() {
             {/* Chart */}
             <Card className="bg-slate-800/50 border-slate-700">
               <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle className="flex items-center">
-                    <Calendar className="mr-2 h-5 w-5" />
-                    Gráfico de Biorritmos (31 días)
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                  <CardTitle className="flex items-center text-lg sm:text-xl">
+                    <Calendar className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+                    <span className="hidden sm:inline">Gráfico de Biorritmos (31 días)</span>
+                    <span className="sm:hidden">Biorritmos (31 días)</span>
                   </CardTitle>
-                  <DateSelector selectedDate={selectedDate} onDateChange={handleDateChange} />
+                  <div className="w-full sm:w-auto">
+                    <DateSelector selectedDate={selectedDate} onDateChange={handleDateChange} />
+                  </div>
                 </div>
-                <CardDescription className="mt-2">
-                  15 días antes y 15 días después de la fecha seleccionada. 
-                  <span className="text-amber-400 ml-2">● Hoy</span>
-                  {selectedDate.toDateString() !== new Date().toDateString() && (
-                    <span className="text-purple-400 ml-2">● Fecha seleccionada</span>
-                  )}
+                <CardDescription className="mt-2 text-xs sm:text-sm">
+                  <span className="block sm:inline">15 días antes y 15 días después de la fecha seleccionada.</span>
+                  <span className="block sm:inline mt-1 sm:mt-0">
+                    <span className="text-amber-400 ml-0 sm:ml-2">● Hoy</span>
+                    {selectedDate.toDateString() !== new Date().toDateString() && (
+                      <span className="text-purple-400 ml-2">● Fecha seleccionada</span>
+                    )}
+                  </span>
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -256,50 +261,52 @@ export default function BiorhythmApp() {
                 
                 {/* Selected Date Information */}
                 {selectedDate.toDateString() !== new Date().toDateString() && biorhythmData.selectedDate && (
-                  <div className="mt-6 p-4 bg-slate-700/50 rounded-lg border border-purple-500/20">
-                    <h4 className="text-lg font-semibold text-purple-400 mb-3 flex items-center">
-                      <Info className="mr-2 h-5 w-5" />
-                      Información para {selectedDate.toLocaleDateString("es-ES", {
-                        weekday: "long",
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })}
+                  <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-slate-700/50 rounded-lg border border-purple-500/20">
+                    <h4 className="text-base sm:text-lg font-semibold text-purple-400 mb-3 flex items-center">
+                      <Info className="mr-2 h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
+                      <span className="text-sm sm:text-base">
+                        Información para {selectedDate.toLocaleDateString("es-ES", {
+                          weekday: "long",
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}
+                      </span>
                     </h4>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div className="text-center">
-                        <div className="text-2xl font-bold text-orange-400 mb-1">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+                      <div className="text-center p-2 sm:p-0">
+                        <div className="text-xl sm:text-2xl font-bold text-orange-400 mb-1">
                           {biorhythmData.selectedDate.physical}%
                         </div>
-                        <div className="text-sm text-slate-300">Físico</div>
+                        <div className="text-xs sm:text-sm text-slate-300">Físico</div>
                         <Progress 
                           value={Math.abs(biorhythmData.selectedDate.physical)} 
                           className="h-2 mt-2 [&>div]:bg-orange-400" 
                         />
                       </div>
-                      <div className="text-center">
-                        <div className="text-2xl font-bold text-blue-400 mb-1">
+                      <div className="text-center p-2 sm:p-0">
+                        <div className="text-xl sm:text-2xl font-bold text-blue-400 mb-1">
                           {biorhythmData.selectedDate.emotional}%
                         </div>
-                        <div className="text-sm text-slate-300">Emocional</div>
+                        <div className="text-xs sm:text-sm text-slate-300">Emocional</div>
                         <Progress 
                           value={Math.abs(biorhythmData.selectedDate.emotional)} 
                           className="h-2 mt-2 [&>div]:bg-blue-400" 
                         />
                       </div>
-                      <div className="text-center">
-                        <div className="text-2xl font-bold text-green-400 mb-1">
+                      <div className="text-center p-2 sm:p-0">
+                        <div className="text-xl sm:text-2xl font-bold text-green-400 mb-1">
                           {biorhythmData.selectedDate.intellectual}%
                         </div>
-                        <div className="text-sm text-slate-300">Intelectual</div>
+                        <div className="text-xs sm:text-sm text-slate-300">Intelectual</div>
                         <Progress 
                           value={Math.abs(biorhythmData.selectedDate.intellectual)} 
                           className="h-2 mt-2 [&>div]:bg-green-400" 
                         />
                       </div>
                     </div>
-                    <div className="mt-4 text-center">
-                      <div className="text-lg font-semibold text-amber-400">
+                    <div className="mt-3 sm:mt-4 text-center">
+                      <div className="text-base sm:text-lg font-semibold text-amber-400">
                         Estado General: {Math.round(
                           (biorhythmData.selectedDate.physical + biorhythmData.selectedDate.emotional + biorhythmData.selectedDate.intellectual) / 3
                         )}%
