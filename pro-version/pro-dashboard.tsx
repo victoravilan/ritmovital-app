@@ -21,22 +21,52 @@ import {
 
 interface ProDashboardProps {
   onBackToBasic?: () => void
+  initialUser?: {
+    name: string
+    birthDate: string
+    birthPlace: string
+  }
 }
 
-export default function ProDashboard({ onBackToBasic }: ProDashboardProps = {}) {
+export default function ProDashboard({ onBackToBasic, initialUser }: ProDashboardProps = {}) {
   const [people, setPeople] = useState<ProUserProfile[]>([])
+  const [activePeople, setActivePeople] = useState<string[]>([])
   const [selectedDate, setSelectedDate] = useState<Date>(new Date())
   const [comparisonType, setComparisonType] = useState<ComparisonType>('physical')
   const [biorhythmData, setBiorhythmData] = useState<MultiBiorhythmData | null>(null)
   const [recommendations, setRecommendations] = useState<string[]>([])
 
-  // Load saved data
+  // Load saved data and add initial user
   useEffect(() => {
     const savedPeople = localStorage.getItem("biorhythm-pro-people")
+    const savedActivePeople = localStorage.getItem("biorhythm-pro-active-people")
+    let loadedPeople: ProUserProfile[] = []
+    let loadedActivePeople: string[] = []
+    
     if (savedPeople) {
-      setPeople(JSON.parse(savedPeople))
+      loadedPeople = JSON.parse(savedPeople)
     }
-  }, [])
+    
+    if (savedActivePeople) {
+      loadedActivePeople = JSON.parse(savedActivePeople)
+    }
+    
+    // Add initial user if provided and not already in the list
+    if (initialUser && !loadedPeople.find(p => p.name === initialUser.name && p.birthDate === initialUser.birthDate)) {
+      const initialUserProfile: ProUserProfile = {
+        id: 'initial-user',
+        name: initialUser.name,
+        birthDate: initialUser.birthDate,
+        birthPlace: initialUser.birthPlace,
+        color: "#fb7185", // Pink color for initial user
+      }
+      loadedPeople = [initialUserProfile, ...loadedPeople]
+      loadedActivePeople = ['initial-user', ...loadedActivePeople]
+    }
+    
+    setPeople(loadedPeople)
+    setActivePeople(loadedActivePeople)
+  }, [initialUser])
 
   // Save people data
   useEffect(() => {
@@ -45,10 +75,16 @@ export default function ProDashboard({ onBackToBasic }: ProDashboardProps = {}) 
     }
   }, [people])
 
+  // Save active people data
+  useEffect(() => {
+    localStorage.setItem("biorhythm-pro-active-people", JSON.stringify(activePeople))
+  }, [activePeople])
+
   // Calculate biorhythms when data changes
   useEffect(() => {
-    if (people.length > 0) {
-      const data = calculateMultiBiorhythms(people, selectedDate, comparisonType)
+    if (people.length > 0 && activePeople.length > 0) {
+      const activePeopleData = people.filter(person => activePeople.includes(person.id))
+      const data = calculateMultiBiorhythms(activePeopleData, selectedDate, comparisonType)
       setBiorhythmData(data)
       
       const recs = generateCombinedRecommendations(data.people, comparisonType, selectedDate)
@@ -57,7 +93,7 @@ export default function ProDashboard({ onBackToBasic }: ProDashboardProps = {}) 
       setBiorhythmData(null)
       setRecommendations([])
     }
-  }, [people, selectedDate, comparisonType])
+  }, [people, activePeople, selectedDate, comparisonType])
 
   const handleDateChange = (newDate: Date) => {
     setSelectedDate(newDate)
@@ -142,6 +178,8 @@ export default function ProDashboard({ onBackToBasic }: ProDashboardProps = {}) 
             <PeopleManager 
               people={people} 
               onPeopleChange={handlePeopleChange}
+              activePeople={activePeople}
+              onActivePeopleChange={setActivePeople}
               maxPeople={3}
             />
           </TabsContent>
@@ -207,7 +245,7 @@ export default function ProDashboard({ onBackToBasic }: ProDashboardProps = {}) 
                     {biorhythmData && (
                       <MultiBiorhythmChart 
                         data={biorhythmData.combinedChartData}
-                        people={people}
+                        people={people.filter(person => activePeople.includes(person.id))}
                         comparisonType={comparisonType}
                       />
                     )}

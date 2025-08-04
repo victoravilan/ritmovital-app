@@ -129,7 +129,16 @@ export default function BiorhythmApp() {
 
   // Show Pro version if selected
   if (showProVersion) {
-    return <ProDashboard onBackToBasic={() => setShowProVersion(false)} />
+    return (
+      <ProDashboard 
+        onBackToBasic={() => setShowProVersion(false)}
+        initialUser={userProfile ? {
+          name: userProfile.name,
+          birthDate: userProfile.birthDate,
+          birthPlace: userProfile.birthPlace
+        } : undefined}
+      />
+    )
   }
 
   const state = getBiorhythmState(biorhythmData.today, biorhythmData.yesterday)
