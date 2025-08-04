@@ -8,9 +8,10 @@ import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Calendar, Activity, Brain, Heart, Utensils, Dumbbell, Palette, Smile } from "lucide-react"
+import { Calendar, Activity, Brain, Heart, Utensils, Dumbbell, Palette, Smile, Info } from "lucide-react"
 import OnboardingFlow from "@/components/onboarding-flow"
 import BiorhythmChart from "@/components/ui/biorhythm-chart"
+import DateSelector from "@/components/ui/date-selector"
 import RecommendationsPanel from "@/components/recommendations-panel"
 import DashboardSkeleton from "@/components/dashboard-skeleton"
 import {
@@ -23,6 +24,7 @@ import {
 export default function BiorhythmApp() {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
   const [biorhythmData, setBiorhythmData] = useState<BiorhythmData | null>(null)
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date())
   const [showOnboarding, setShowOnboarding] = useState(true)
 
   useEffect(() => {
@@ -34,10 +36,10 @@ export default function BiorhythmApp() {
       setShowOnboarding(false)
 
       // Calculate biorhythms
-      const data = calculateBiorhythms(new Date(profile.birthDate))
+      const data = calculateBiorhythms(new Date(profile.birthDate), selectedDate)
       setBiorhythmData(data)
     }
-  }, [])
+  }, [selectedDate])
 
   const handleOnboardingComplete = (profile: UserProfile) => {
     setUserProfile(profile)
@@ -45,8 +47,16 @@ export default function BiorhythmApp() {
     setShowOnboarding(false)
 
     // Calculate biorhythms
-    const data = calculateBiorhythms(new Date(profile.birthDate))
+    const data = calculateBiorhythms(new Date(profile.birthDate), selectedDate)
     setBiorhythmData(data)
+  }
+
+  const handleDateChange = (newDate: Date) => {
+    setSelectedDate(newDate)
+    if (userProfile) {
+      const data = calculateBiorhythms(new Date(userProfile.birthDate), newDate)
+      setBiorhythmData(data)
+    }
   }
 
   const MeditationTimer = () => {
@@ -226,13 +236,77 @@ export default function BiorhythmApp() {
             {/* Chart */}
             <Card className="bg-slate-800/50 border-slate-700">
               <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Calendar className="mr-2 h-5 w-5" />
-                  Gráfico de Biorritmos
-                </CardTitle>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="flex items-center">
+                    <Calendar className="mr-2 h-5 w-5" />
+                    Gráfico de Biorritmos (31 días)
+                  </CardTitle>
+                  <DateSelector selectedDate={selectedDate} onDateChange={handleDateChange} />
+                </div>
+                <CardDescription className="mt-2">
+                  15 días antes y 15 días después de la fecha seleccionada. 
+                  <span className="text-amber-400 ml-2">● Hoy</span>
+                  {selectedDate.toDateString() !== new Date().toDateString() && (
+                    <span className="text-purple-400 ml-2">● Fecha seleccionada</span>
+                  )}
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <BiorhythmChart data={biorhythmData.chartData} />
+                
+                {/* Selected Date Information */}
+                {selectedDate.toDateString() !== new Date().toDateString() && biorhythmData.selectedDate && (
+                  <div className="mt-6 p-4 bg-slate-700/50 rounded-lg border border-purple-500/20">
+                    <h4 className="text-lg font-semibold text-purple-400 mb-3 flex items-center">
+                      <Info className="mr-2 h-5 w-5" />
+                      Información para {selectedDate.toLocaleDateString("es-ES", {
+                        weekday: "long",
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })}
+                    </h4>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-orange-400 mb-1">
+                          {biorhythmData.selectedDate.physical}%
+                        </div>
+                        <div className="text-sm text-slate-300">Físico</div>
+                        <Progress 
+                          value={Math.abs(biorhythmData.selectedDate.physical)} 
+                          className="h-2 mt-2 [&>div]:bg-orange-400" 
+                        />
+                      </div>
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-blue-400 mb-1">
+                          {biorhythmData.selectedDate.emotional}%
+                        </div>
+                        <div className="text-sm text-slate-300">Emocional</div>
+                        <Progress 
+                          value={Math.abs(biorhythmData.selectedDate.emotional)} 
+                          className="h-2 mt-2 [&>div]:bg-blue-400" 
+                        />
+                      </div>
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-green-400 mb-1">
+                          {biorhythmData.selectedDate.intellectual}%
+                        </div>
+                        <div className="text-sm text-slate-300">Intelectual</div>
+                        <Progress 
+                          value={Math.abs(biorhythmData.selectedDate.intellectual)} 
+                          className="h-2 mt-2 [&>div]:bg-green-400" 
+                        />
+                      </div>
+                    </div>
+                    <div className="mt-4 text-center">
+                      <div className="text-lg font-semibold text-amber-400">
+                        Estado General: {Math.round(
+                          (biorhythmData.selectedDate.physical + biorhythmData.selectedDate.emotional + biorhythmData.selectedDate.intellectual) / 3
+                        )}%
+                      </div>
+                    </div>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>

@@ -8,6 +8,8 @@ interface ChartDataPoint {
   emotional: number
   intellectual: number
   isToday?: boolean
+  isSelected?: boolean
+  fullDate: Date
 }
 
 interface BiorhythmChartProps {
@@ -34,6 +36,9 @@ const CustomDot = (props: any) => {
   const { cx, cy, payload } = props
   if (payload && payload.isToday) {
     return <circle cx={cx} cy={cy} r={6} fill="#fbbf24" stroke="#f59e0b" strokeWidth={2} />
+  }
+  if (payload && payload.isSelected) {
+    return <circle cx={cx} cy={cy} r={5} fill="#8b5cf6" stroke="#7c3aed" strokeWidth={2} />
   }
   return <circle cx={cx} cy={cy} r={0} />
 }

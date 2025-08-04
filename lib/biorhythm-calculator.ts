@@ -33,62 +33,83 @@ export interface BiorhythmState {
 export interface BiorhythmData {
   today: BiorhythmValues
   yesterday: BiorhythmValues
+  selectedDate?: BiorhythmValues
   chartData: Array<{
     date: string
     physical: number
     emotional: number
     intellectual: number
     isToday?: boolean
+    isSelected?: boolean
+    fullDate: Date
   }>
 }
 
-export function calculateBiorhythms(birthDate: Date): BiorhythmData {
+export function calculateBiorhythms(birthDate: Date, selectedDate?: Date): BiorhythmData {
   const today = new Date()
-  const yesterday = new Date(today)
+  const referenceDate = selectedDate || today
+  const yesterday = new Date(referenceDate)
   yesterday.setDate(yesterday.getDate() - 1)
 
   // Calculate days since birth
   const daysSinceBirth = Math.floor((today.getTime() - birthDate.getTime()) / (1000 * 60 * 60 * 24))
-  const daysSinceBirthYesterday = daysSinceBirth - 1
+  const daysSinceBirthReference = Math.floor((referenceDate.getTime() - birthDate.getTime()) / (1000 * 60 * 60 * 24))
+  const daysSinceBirthYesterday = daysSinceBirthReference - 1
 
   // Biorhythm periods
   const PHYSICAL_PERIOD = 23
   const EMOTIONAL_PERIOD = 28
   const INTELLECTUAL_PERIOD = 33
 
-  // Calculate today's values
+  // Calculate today's values (always current day)
   const todayValues: BiorhythmValues = {
     physical: Math.round(Math.sin((2 * Math.PI * daysSinceBirth) / PHYSICAL_PERIOD) * 100),
     emotional: Math.round(Math.sin((2 * Math.PI * daysSinceBirth) / EMOTIONAL_PERIOD) * 100),
     intellectual: Math.round(Math.sin((2 * Math.PI * daysSinceBirth) / INTELLECTUAL_PERIOD) * 100),
   }
 
-  // Calculate yesterday's values
+  // Calculate yesterday's values (relative to reference date)
   const yesterdayValues: BiorhythmValues = {
     physical: Math.round(Math.sin((2 * Math.PI * daysSinceBirthYesterday) / PHYSICAL_PERIOD) * 100),
     emotional: Math.round(Math.sin((2 * Math.PI * daysSinceBirthYesterday) / EMOTIONAL_PERIOD) * 100),
     intellectual: Math.round(Math.sin((2 * Math.PI * daysSinceBirthYesterday) / INTELLECTUAL_PERIOD) * 100),
   }
 
-  // Generate chart data for the last 15 days
+  // Calculate selected date values (if different from today)
+  let selectedDateValues: BiorhythmValues | undefined
+  if (selectedDate && selectedDate.getTime() !== today.getTime()) {
+    selectedDateValues = {
+      physical: Math.round(Math.sin((2 * Math.PI * daysSinceBirthReference) / PHYSICAL_PERIOD) * 100),
+      emotional: Math.round(Math.sin((2 * Math.PI * daysSinceBirthReference) / EMOTIONAL_PERIOD) * 100),
+      intellectual: Math.round(Math.sin((2 * Math.PI * daysSinceBirthReference) / INTELLECTUAL_PERIOD) * 100),
+    }
+  }
+
+  // Generate chart data: 15 days before reference date to 15 days after
   const chartData = []
-  for (let i = -14; i <= 0; i++) {
-    const date = new Date(today)
+  for (let i = -15; i <= 15; i++) {
+    const date = new Date(referenceDate)
     date.setDate(date.getDate() + i)
-    const daysFromBirth = daysSinceBirth + i
+    const daysFromBirth = daysSinceBirthReference + i
+
+    const isToday = date.toDateString() === today.toDateString()
+    const isSelected = selectedDate && date.toDateString() === selectedDate.toDateString()
 
     chartData.push({
       date: date.toLocaleDateString("es-ES", { month: "short", day: "numeric" }),
       physical: Math.round(Math.sin((2 * Math.PI * daysFromBirth) / PHYSICAL_PERIOD) * 100),
       emotional: Math.round(Math.sin((2 * Math.PI * daysFromBirth) / EMOTIONAL_PERIOD) * 100),
       intellectual: Math.round(Math.sin((2 * Math.PI * daysFromBirth) / INTELLECTUAL_PERIOD) * 100),
-      isToday: i === 0,
+      isToday,
+      isSelected,
+      fullDate: new Date(date),
     })
   }
 
   return {
     today: todayValues,
     yesterday: yesterdayValues,
+    selectedDate: selectedDateValues,
     chartData,
   }
 }
