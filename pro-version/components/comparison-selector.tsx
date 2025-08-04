@@ -53,20 +53,19 @@ export default function ComparisonSelector({ selectedType, onTypeChange }: Compa
           {comparisonOptions.map((option) => {
             const Icon = option.icon
             const isSelected = selectedType === option.type
-            
+
             return (
               <Button
                 key={option.type}
                 variant="outline"
                 onClick={() => onTypeChange(option.type)}
-                className={`h-auto p-4 flex flex-col items-center space-y-3 transition-all duration-200 ${
-                  isSelected
-                    ? `${option.bgColor} ${option.borderColor} border-2`
-                    : 'bg-slate-700/50 border-slate-600 hover:bg-slate-600/50'
-                }`}
+                className={`h-auto p-4 flex flex-col items-center space-y-3 transition-all duration-200 ${isSelected
+                  ? `${option.bgColor} ${option.borderColor} border-2`
+                  : 'bg-slate-700/50 border-slate-600 hover:bg-slate-600/50'
+                  }`}
               >
-                <Icon 
-                  className={`h-8 w-8 ${isSelected ? option.color : 'text-slate-400'}`} 
+                <Icon
+                  className={`h-8 w-8 ${isSelected ? option.color : 'text-slate-400'}`}
                 />
                 <div className="text-center">
                   <h3 className={`font-semibold ${isSelected ? 'text-white' : 'text-slate-300'}`}>
@@ -83,7 +82,7 @@ export default function ComparisonSelector({ selectedType, onTypeChange }: Compa
             )
           })}
         </div>
-        
+
         {/* Selected type info */}
         <div className="mt-6 p-4 bg-slate-700/50 rounded-lg">
           <h4 className="font-semibold text-white mb-2">
