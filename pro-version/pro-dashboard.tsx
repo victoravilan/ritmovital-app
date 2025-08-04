@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import Image from "next/image"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Crown, Users, TrendingUp, Calendar, Sparkles } from "lucide-react"
@@ -18,7 +19,11 @@ import {
   type ComparisonType,
 } from "./lib/multi-biorhythm-calculator"
 
-export default function ProDashboard() {
+interface ProDashboardProps {
+  onBackToBasic?: () => void
+}
+
+export default function ProDashboard({ onBackToBasic }: ProDashboardProps = {}) {
   const [people, setPeople] = useState<ProUserProfile[]>([])
   const [selectedDate, setSelectedDate] = useState<Date>(new Date())
   const [comparisonType, setComparisonType] = useState<ComparisonType>('physical')
@@ -83,21 +88,36 @@ export default function ProDashboard() {
       {/* Content Container */}
       <div className="relative z-10 container mx-auto p-4 space-y-6">
         {/* Pro Header */}
-        <div className="text-center py-8">
-          <div className="flex items-center justify-center mb-4">
-            <Crown className="h-8 w-8 text-amber-400 mr-3" />
-            <h1 className="text-4xl md:text-6xl font-bold text-white drop-shadow-2xl">
-              RitmoVital Pro
-            </h1>
-            <Crown className="h-8 w-8 text-amber-400 ml-3" />
+        <div className="relative">
+          {/* Back button */}
+          {onBackToBasic && (
+            <div className="absolute top-0 left-0">
+              <Button
+                onClick={onBackToBasic}
+                variant="outline"
+                className="bg-slate-700/50 border-slate-600 text-white hover:bg-slate-600/50"
+              >
+                ← Versión Básica
+              </Button>
+            </div>
+          )}
+          
+          <div className="text-center py-8">
+            <div className="flex items-center justify-center mb-4">
+              <Crown className="h-8 w-8 text-amber-400 mr-3" />
+              <h1 className="text-4xl md:text-6xl font-bold text-white drop-shadow-2xl">
+                RitmoVital Pro
+              </h1>
+              <Crown className="h-8 w-8 text-amber-400 ml-3" />
+            </div>
+            <p className="text-xl md:text-2xl text-amber-300 drop-shadow-lg">
+              Comparación Avanzada de Biorritmos
+            </p>
+            <Badge className="mt-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white">
+              <Sparkles className="mr-2 h-4 w-4" />
+              Versión Profesional
+            </Badge>
           </div>
-          <p className="text-xl md:text-2xl text-amber-300 drop-shadow-lg">
-            Comparación Avanzada de Biorritmos
-          </p>
-          <Badge className="mt-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white">
-            <Sparkles className="mr-2 h-4 w-4" />
-            Versión Profesional
-          </Badge>
         </div>
 
         {/* Main Dashboard */}

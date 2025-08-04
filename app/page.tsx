@@ -8,12 +8,13 @@ import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Calendar, Activity, Brain, Heart, Utensils, Dumbbell, Palette, Smile, Info } from "lucide-react"
+import { Calendar, Activity, Brain, Heart, Utensils, Dumbbell, Palette, Smile, Info, Crown } from "lucide-react"
 import OnboardingFlow from "@/components/onboarding-flow"
 import BiorhythmChart from "@/components/ui/biorhythm-chart"
 import DateSelector from "@/components/ui/date-selector"
 import RecommendationsPanel from "@/components/recommendations-panel"
 import DashboardSkeleton from "@/components/dashboard-skeleton"
+import ProDashboard from "@/pro-version/pro-dashboard"
 import {
   calculateBiorhythms,
   getBiorhythmState,
@@ -26,6 +27,7 @@ export default function BiorhythmApp() {
   const [biorhythmData, setBiorhythmData] = useState<BiorhythmData | null>(null)
   const [selectedDate, setSelectedDate] = useState<Date>(new Date())
   const [showOnboarding, setShowOnboarding] = useState(true)
+  const [showProVersion, setShowProVersion] = useState(false)
 
   useEffect(() => {
     // Check if user profile exists in localStorage
@@ -125,6 +127,11 @@ export default function BiorhythmApp() {
     return <DashboardSkeleton />
   }
 
+  // Show Pro version if selected
+  if (showProVersion) {
+    return <ProDashboard onBackToBasic={() => setShowProVersion(false)} />
+  }
+
   const state = getBiorhythmState(biorhythmData.today, biorhythmData.yesterday)
   const overallScore = Math.round(
     (biorhythmData.today.physical + biorhythmData.today.emotional + biorhythmData.today.intellectual) / 3,
@@ -177,9 +184,19 @@ export default function BiorhythmApp() {
               </p>
             </div>
           </div>
-          <Badge variant="outline" className="text-amber-400 border-amber-400">
-            Estado General: {overallScore}%
-          </Badge>
+          <div className="flex items-center gap-3">
+            <Button
+              onClick={() => setShowProVersion(true)}
+              className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-semibold"
+            >
+              <Crown className="mr-2 h-4 w-4" />
+              <span className="hidden sm:inline">Versión Pro</span>
+              <span className="sm:hidden">Pro</span>
+            </Button>
+            <Badge variant="outline" className="text-amber-400 border-amber-400">
+              Estado General: {overallScore}%
+            </Badge>
+          </div>
         </div>
 
         {/* Main Dashboard */}
