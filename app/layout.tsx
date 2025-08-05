@@ -23,15 +23,27 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/img/icono-ritmoovital.png', sizes: '32x32', type: 'image/png' },
-      { url: '/img/icono-ritmoovital.png', sizes: '16x16', type: 'image/png' },
+      { 
+        url: process.env.NEXT_PUBLIC_APP_VERSION === 'pro' ? '/img/icono-ritmoovital-pro.png' : '/img/icono-ritmoovital.png', 
+        sizes: '32x32', 
+        type: 'image/png' 
+      },
+      { 
+        url: process.env.NEXT_PUBLIC_APP_VERSION === 'pro' ? '/img/icono-ritmoovital-pro.png' : '/img/icono-ritmoovital.png', 
+        sizes: '16x16', 
+        type: 'image/png' 
+      },
     ],
-    shortcut: '/img/icono-ritmoovital.png',
+    shortcut: process.env.NEXT_PUBLIC_APP_VERSION === 'pro' ? '/img/icono-ritmoovital-pro.png' : '/img/icono-ritmoovital.png',
     apple: [
-      { url: '/img/icono-ritmoovital.png', sizes: '180x180', type: 'image/png' },
+      { 
+        url: process.env.NEXT_PUBLIC_APP_VERSION === 'pro' ? '/img/icono-ritmoovital-pro.png' : '/img/icono-ritmoovital.png', 
+        sizes: '180x180', 
+        type: 'image/png' 
+      },
     ],
   },
-  manifest: '/manifest.json',
+  manifest: process.env.NEXT_PUBLIC_APP_VERSION === 'pro' ? '/manifest-pro.json' : '/manifest.json',
   themeColor: '#8B5CF6',
   colorScheme: 'dark',
   viewport: {
@@ -51,14 +63,14 @@ export default function RootLayout({
       <head>
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="apple-mobile-web-app-title" content="Equilibrio Vital" />
+        <meta name="apple-mobile-web-app-title" content={process.env.NEXT_PUBLIC_APP_VERSION === 'pro' ? 'Equilibrio Vital Pro' : 'Equilibrio Vital'} />
         <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="msapplication-TileColor" content="#8B5CF6" />
-        <meta name="msapplication-TileImage" content="/img/icono-ritmoovital.png" />
-        <link rel="apple-touch-icon" href="/img/icono-ritmoovital.png" />
-        <link rel="apple-touch-icon" sizes="152x152" href="/img/icono-ritmoovital.png" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/img/icono-ritmoovital.png" />
-        <link rel="apple-touch-icon" sizes="167x167" href="/img/icono-ritmoovital.png" />
+        <meta name="msapplication-TileColor" content={process.env.NEXT_PUBLIC_APP_VERSION === 'pro' ? '#d97706' : '#8B5CF6'} />
+        <meta name="msapplication-TileImage" content={process.env.NEXT_PUBLIC_APP_VERSION === 'pro' ? '/img/icono-ritmoovital-pro.png' : '/img/icono-ritmoovital.png'} />
+        <link rel="apple-touch-icon" href={process.env.NEXT_PUBLIC_APP_VERSION === 'pro' ? '/img/icono-ritmoovital-pro.png' : '/img/icono-ritmoovital.png'} />
+        <link rel="apple-touch-icon" sizes="152x152" href={process.env.NEXT_PUBLIC_APP_VERSION === 'pro' ? '/img/icono-ritmoovital-pro.png' : '/img/icono-ritmoovital.png'} />
+        <link rel="apple-touch-icon" sizes="180x180" href={process.env.NEXT_PUBLIC_APP_VERSION === 'pro' ? '/img/icono-ritmoovital-pro.png' : '/img/icono-ritmoovital.png'} />
+        <link rel="apple-touch-icon" sizes="167x167" href={process.env.NEXT_PUBLIC_APP_VERSION === 'pro' ? '/img/icono-ritmoovital-pro.png' : '/img/icono-ritmoovital.png'} />
       </head>
       <body>{children}</body>
     </html>
