@@ -1,0 +1,14 @@
+[build]
+  publish = "out"
+  command = "npm run build:lite"
+
+[build.environment]
+  NODE_VERSION = "18"
+  NPM_FLAGS = "--legacy-peer-deps"
+  NEXT_PUBLIC_APP_VERSION = "lite"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"

@@ -4,8 +4,12 @@ import { GeistMono } from 'geist/font/mono'
 import './global.css'
 
 export const metadata: Metadata = {
-  title: 'Equilibrio Vital con Anand',
-  description: 'Descubre tu bienestar holístico con un guía virtual. Explora salud, astrología, sugerencias y cita motivadora.',
+  title: process.env.NEXT_PUBLIC_APP_VERSION === 'pro' 
+    ? 'Equilibrio Vital Pro - Comparación Avanzada' 
+    : 'Equilibrio Vital - Descubre tu Bienestar',
+  description: process.env.NEXT_PUBLIC_APP_VERSION === 'pro'
+    ? 'Versión profesional para comparar biorritmos de múltiples personas. Análisis grupal y recomendaciones avanzadas.'
+    : 'Descubre tu bienestar holístico con un guía virtual. Explora salud, astrología, sugerencias y cita motivadora.',
   generator: 'Next.js',
   applicationName: 'Equilibrio Vital',
   keywords: ['bienestar', 'holístico', 'salud', 'astrología', 'motivación', 'equilibrio'],

@@ -194,14 +194,17 @@ export default function BiorhythmApp() {
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <Button
-              onClick={() => setShowProVersion(true)}
-              className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-semibold"
-            >
-              <Crown className="mr-2 h-4 w-4" />
-              <span className="hidden sm:inline">Versión Pro</span>
-              <span className="sm:hidden">Pro</span>
-            </Button>
+            {/* Pro button only in development or when NEXT_PUBLIC_ENABLE_PRO is true */}
+            {(process.env.NODE_ENV === 'development' || process.env.NEXT_PUBLIC_ENABLE_PRO === 'true') && (
+              <Button
+                onClick={() => setShowProVersion(true)}
+                className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-semibold"
+              >
+                <Crown className="mr-2 h-4 w-4" />
+                <span className="hidden sm:inline">Versión Pro</span>
+                <span className="sm:hidden">Pro</span>
+              </Button>
+            )}
             <Badge variant="outline" className="text-amber-400 border-amber-400">
               Estado General: {overallScore}%
             </Badge>

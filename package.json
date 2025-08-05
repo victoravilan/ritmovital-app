@@ -4,7 +4,11 @@
   "private": true,
   "scripts": {
     "build": "next build",
+    "build:lite": "NEXT_PUBLIC_APP_VERSION=lite next build",
+    "build:pro": "NEXT_PUBLIC_APP_VERSION=pro NEXT_PUBLIC_ENABLE_PRO=true next build",
     "dev": "next dev",
+    "dev:lite": "NEXT_PUBLIC_APP_VERSION=lite next dev",
+    "dev:pro": "NEXT_PUBLIC_APP_VERSION=pro NEXT_PUBLIC_ENABLE_PRO=true next dev",
     "lint": "next lint",
     "start": "next start"
   },
