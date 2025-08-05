@@ -201,8 +201,8 @@ export default function BiorhythmApp() {
                 className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-semibold"
               >
                 <Crown className="mr-2 h-4 w-4" />
-                <span className="hidden sm:inline">Versión Pro</span>
-                <span className="sm:hidden">Pro</span>
+                <span className="hidden sm:inline">Agregar y comparar personas</span>
+                <span className="sm:hidden">Comparar</span>
               </Button>
             )}
             <Badge variant="outline" className="text-amber-400 border-amber-400">

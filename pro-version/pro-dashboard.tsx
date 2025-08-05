@@ -43,15 +43,15 @@ export default function ProDashboard({ onBackToBasic, initialUser }: ProDashboar
     const savedActivePeople = localStorage.getItem("biorhythm-pro-active-people")
     let loadedPeople: ProUserProfile[] = []
     let loadedActivePeople: string[] = []
-    
+
     if (savedPeople) {
       loadedPeople = JSON.parse(savedPeople)
     }
-    
+
     if (savedActivePeople) {
       loadedActivePeople = JSON.parse(savedActivePeople)
     }
-    
+
     // Add initial user if provided and not already in the list
     if (initialUser && !loadedPeople.find(p => p.name === initialUser.name && p.birthDate === initialUser.birthDate)) {
       const initialUserProfile: ProUserProfile = {
@@ -64,7 +64,7 @@ export default function ProDashboard({ onBackToBasic, initialUser }: ProDashboar
       loadedPeople = [initialUserProfile, ...loadedPeople]
       loadedActivePeople = ['initial-user', ...loadedActivePeople]
     }
-    
+
     setPeople(loadedPeople)
     setActivePeople(loadedActivePeople)
   }, [initialUser])
@@ -87,7 +87,7 @@ export default function ProDashboard({ onBackToBasic, initialUser }: ProDashboar
       const activePeopleData = people.filter(person => activePeople.includes(person.id))
       const data = calculateMultiBiorhythms(activePeopleData, selectedDate, comparisonType)
       setBiorhythmData(data)
-      
+
       const recs = generateCombinedRecommendations(data.people, comparisonType, selectedDate)
       setRecommendations(recs)
     } else {
@@ -113,13 +113,13 @@ export default function ProDashboard({ onBackToBasic, initialUser }: ProDashboar
       {/* Background Image with Overlay */}
       <div className="fixed inset-0 z-0">
         <Image
-          src="/img/cover-ritmovital.png"
+          src="/img/cover-ritmovital-pro.png"
           alt="RitmoVital Pro Background"
           fill
           className="object-cover"
           priority
         />
-        <div className="absolute inset-0 bg-slate-900/90 backdrop-blur-sm" />
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-900/85 via-purple-900/20 to-amber-900/30 backdrop-blur-sm" />
       </div>
 
       {/* Content Container */}
@@ -138,22 +138,27 @@ export default function ProDashboard({ onBackToBasic, initialUser }: ProDashboar
               </Button>
             </div>
           )}
-          
+
           <div className="text-center py-8">
             <div className="flex items-center justify-center mb-4">
-              <Crown className="h-8 w-8 text-amber-400 mr-3" />
-              <h1 className="text-4xl md:text-6xl font-bold text-white drop-shadow-2xl">
+              <Crown className="h-8 w-8 text-amber-400 mr-3 animate-pulse" />
+              <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-amber-300 via-yellow-300 to-amber-400 bg-clip-text text-transparent drop-shadow-2xl">
                 RitmoVital Pro
               </h1>
-              <Crown className="h-8 w-8 text-amber-400 ml-3" />
+              <Crown className="h-8 w-8 text-amber-400 ml-3 animate-pulse" />
             </div>
             <p className="text-xl md:text-2xl text-amber-300 drop-shadow-lg">
               Comparación Avanzada de Biorritmos
             </p>
-            <Badge className="mt-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white">
-              <Sparkles className="mr-2 h-4 w-4" />
-              Versión Profesional
-            </Badge>
+            <div className="flex items-center justify-center gap-2 mt-4">
+              <Badge className="bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg">
+                <Sparkles className="mr-2 h-4 w-4" />
+                Versión Profesional
+              </Badge>
+              <Badge variant="outline" className="border-amber-400 text-amber-400">
+                Premium
+              </Badge>
+            </div>
           </div>
         </div>
 
@@ -180,8 +185,8 @@ export default function ProDashboard({ onBackToBasic, initialUser }: ProDashboar
 
           {/* People Management Tab */}
           <TabsContent value="people" className="space-y-6">
-            <PeopleManager 
-              people={people} 
+            <PeopleManager
+              people={people}
               onPeopleChange={handlePeopleChange}
               activePeople={activePeople}
               onActivePeopleChange={setActivePeople}
@@ -223,7 +228,7 @@ export default function ProDashboard({ onBackToBasic, initialUser }: ProDashboar
                         <span className="block mt-1 text-purple-400">
                           Mostrando datos para: {selectedDate.toLocaleDateString("es-ES", {
                             weekday: "long",
-                            day: "numeric", 
+                            day: "numeric",
                             month: "long",
                             year: "numeric"
                           })}
@@ -278,7 +283,7 @@ export default function ProDashboard({ onBackToBasic, initialUser }: ProDashboar
             ) : (
               <>
                 {/* Comparison Type Selector */}
-                <ComparisonSelector 
+                <ComparisonSelector
                   selectedType={comparisonType}
                   onTypeChange={handleComparisonTypeChange}
                 />
@@ -308,7 +313,7 @@ export default function ProDashboard({ onBackToBasic, initialUser }: ProDashboar
                   </CardHeader>
                   <CardContent className="p-2 sm:p-6">
                     {biorhythmData && (
-                      <MultiBiorhythmChart 
+                      <MultiBiorhythmChart
                         data={biorhythmData.combinedChartData}
                         people={people.filter(person => activePeople.includes(person.id))}
                         comparisonType={comparisonType}
@@ -348,11 +353,11 @@ export default function ProDashboard({ onBackToBasic, initialUser }: ProDashboar
                 <CardContent>
                   <div className="space-y-4">
                     {recommendations.map((recommendation, index) => (
-                      <div 
+                      <div
                         key={index}
                         className="p-4 bg-slate-700/50 rounded-lg border-l-4 border-amber-400"
                       >
-                        <div 
+                        <div
                           className="text-sm text-slate-200 leading-relaxed"
                           dangerouslySetInnerHTML={{ __html: recommendation.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>') }}
                         />
