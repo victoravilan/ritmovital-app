@@ -1,14 +1,14 @@
 "use client"
 
 import { useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
+import { Button } from "./ui/button"
+import { Input } from "./ui/input"
+import { Label } from "./ui/label"
+import { Badge } from "./ui/badge"
+import { Avatar, AvatarFallback } from "./ui/avatar"
 import { Plus, Trash2, Users, Edit3, Eye, EyeOff } from "lucide-react"
-import { Checkbox } from "@/components/ui/checkbox"
+import { Checkbox } from "./ui/checkbox"
 import { ProUserProfile, PERSON_COLORS } from "../lib/multi-biorhythm-calculator"
 
 interface PeopleManagerProps {
@@ -202,7 +202,7 @@ export default function PeopleManager({ people, onPeopleChange, activePeople, on
                       type="date"
                       value={formData.birthDate}
                       onChange={(e) => setFormData({ ...formData, birthDate: e.target.value })}
-                      className="bg-white border-slate-400 text-black [&::-webkit-calendar-picker-indicator]:filter-none"
+                      className="bg-slate-600 border-slate-500 text-white [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:brightness-0 [&::-webkit-calendar-picker-indicator]:contrast-100"
                       required
                     />
                   </div>

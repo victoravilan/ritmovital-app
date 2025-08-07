@@ -56,7 +56,7 @@ const getComparisonTitle = (type: ComparisonType): string => {
 export default function MultiBiorhythmChart({ data, people, comparisonType }: MultiBiorhythmChartProps) {
   // Calculate width based on data length to enable horizontal scroll
   const chartWidth = Math.max(800, data.length * 50) // More space for multiple lines
-  
+
   return (
     <div className="w-full">
       {/* Chart Title */}
@@ -73,7 +73,7 @@ export default function MultiBiorhythmChart({ data, people, comparisonType }: Mu
       <div className="mb-4 flex flex-wrap justify-center gap-4">
         {people.map((person) => (
           <div key={person.id} className="flex items-center gap-2">
-            <div 
+            <div
               className="w-3 h-3 rounded-full"
               style={{ backgroundColor: person.color }}
             />
@@ -84,24 +84,24 @@ export default function MultiBiorhythmChart({ data, people, comparisonType }: Mu
 
       {/* Scrollable container */}
       <div className="overflow-x-auto pb-4">
-        <div 
-          className="h-80 sm:h-96 lg:h-[28rem]" 
+        <div
+          className="h-80 sm:h-96 lg:h-[28rem]"
           style={{ width: `${chartWidth}px`, minWidth: '100%' }}
         >
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart 
-              data={data} 
-              margin={{ 
-                top: 20, 
-                right: 30, 
-                left: 20, 
-                bottom: 60 
+            <LineChart
+              data={data}
+              margin={{
+                top: 20,
+                right: 30,
+                left: 20,
+                bottom: 60
               }}
             >
               <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-              <XAxis 
-                dataKey="date" 
-                stroke="#9ca3af" 
+              <XAxis
+                dataKey="date"
+                stroke="#9ca3af"
                 fontSize={9}
                 angle={-45}
                 textAnchor="end"
@@ -109,9 +109,9 @@ export default function MultiBiorhythmChart({ data, people, comparisonType }: Mu
                 interval={0}
                 tick={{ fontSize: 9 }}
               />
-              <YAxis 
-                domain={[-100, 100]} 
-                stroke="#9ca3af" 
+              <YAxis
+                domain={[-100, 100]}
+                stroke="#9ca3af"
                 fontSize={10}
                 width={45}
                 tick={{ fontSize: 10 }}
@@ -139,7 +139,7 @@ export default function MultiBiorhythmChart({ data, people, comparisonType }: Mu
           </ResponsiveContainer>
         </div>
       </div>
-      
+
       {/* Scroll indicator */}
       <div className="text-center mt-2">
         <p className="text-xs text-slate-400">

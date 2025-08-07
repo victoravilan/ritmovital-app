@@ -136,7 +136,12 @@ export function calculateMultiBiorhythms(
     people.forEach(person => {
       const dayData = person.chartData.find(d => d.fullDate.toDateString() === date.toDateString())
       if (dayData) {
-        dataPoint[`${person.profile.id}_${comparisonType}`] = dayData[comparisonType]
+        // Ensure we're accessing the correct property based on comparison type
+        const value = comparisonType === 'physical' ? dayData.physical :
+                     comparisonType === 'emotional' ? dayData.emotional :
+                     comparisonType === 'intellectual' ? dayData.intellectual : 0
+        
+        dataPoint[`${person.profile.id}_${comparisonType}`] = value
         dataPoint[`${person.profile.id}_name`] = person.profile.name
         dataPoint[`${person.profile.id}_color`] = person.profile.color
       }
@@ -254,3 +259,16 @@ export const PERSON_COLORS = [
   "#84cc16", // Lime
   "#ec4899", // Fuchsia
 ]
+
+// Function to ensure all people have unique colors assigned
+export function ensurePeopleHaveColors(people: ProUserProfile[]): ProUserProfile[] {
+  return people.map((person, index) => {
+    if (!person.color || person.color === '') {
+      return {
+        ...person,
+        color: PERSON_COLORS[index % PERSON_COLORS.length]
+      }
+    }
+    return person
+  })
+}
